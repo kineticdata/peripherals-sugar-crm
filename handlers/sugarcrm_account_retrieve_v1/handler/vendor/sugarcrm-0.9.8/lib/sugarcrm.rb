@@ -1,0 +1,16 @@
+require 'net/https'
+require 'pp'
+require 'set'
+require 'uri'
+require 'rubygems'
+require 'active_support/core_ext'
+
+require 'sugarcrm/module_methods'
+require 'sugarcrm/connection'
+require 'sugarcrm/exceptions'
+require 'sugarcrm/attributes'
+require 'sugarcrm/associations'
+require 'sugarcrm/dynamic_finder_match'
+require 'sugarcrm/module'
+require 'sugarcrm/base'
+

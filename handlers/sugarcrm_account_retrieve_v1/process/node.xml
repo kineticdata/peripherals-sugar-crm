@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="sugarcrm_account_retrieve" name="SugarCRM Account Retrieve" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>Retrieves an SugarCRM Account.</description>
+    <helpurl>http://ktc.kineticdata.com/handler/sugarcrm_account_retrieve/1</helpurl>
+    <visible>false</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="account_name" label="Account Name" required="true" tooltip="The name of the Account to retrieve" />
+    </parameters>
+    <handler name="sugarcrm_account_retrieve" version="1">
+        <infos>
+            <info name="server_url">&lt;%= @info['server_url'] %&gt;</info>
+            <info name="username">&lt;%= @info['username'] %&gt;</info>
+            <info name="password">&lt;%= @info['password'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info['enable_debug_logging'] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name='account_name'>&lt;%= @parameters['account_name'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml">
+        <result name="Id"/>
+        <result name="Account Type"/>
+        <result name="Assigned User Id"/>
+        <result name="Assigned User Name"/>
+        <result name="Billing Address City"/>
+        <result name="Billing Address Country"/>
+        <result name="Billing Address Postal Code"/>
+        <result name="Billing Address Street"/>
+        <result name="Billing Address Street 2"/>
+        <result name="Billing Address Street 3"/>
+        <result name="Billing Address Street 4"/>
+        <result name="Campaign Id"/>
+        <result name="Campaign Name"/>
+        <result name="Created By"/>
+        <result name="Created By Name"/>
+        <result name="Date Entered"/>
+        <result name="Date Modified"/>
+        <result name="Description"/>
+        <result name="Email 1"/>
+        <result name="Industry"/>
+        <result name="Modified By Name"/>
+        <result name="Modified User Id"/>
+        <result name="Name"/>
+        <result name="Ownership"/>
+        <result name="Parent Id"/>
+        <result name="Parent Name"/>
+        <result name="Phone Alternate"/>
+        <result name="Phone Fax"/>
+        <result name="Phone Office"/>
+        <result name="Rating"/>
+        <result name="Shipping Address City"/>
+        <result name="Shipping Address Country"/>
+        <result name="Shipping Address Postal Code"/>
+        <result name="Shipping Address State"/>
+        <result name="Shipping Address Street"/>
+        <result name="Shipping Address Street 2"/>
+        <result name="Shipping Address Street 3"/>
+        <result name="Shipping Address Street 4"/>
+        <result name="SIC Code"/>
+        <result name="Ticker Symbol"/>
+        <result name="Valid"/>
+        <result name="Website"/>
+    </results>
+</taskDefinition>

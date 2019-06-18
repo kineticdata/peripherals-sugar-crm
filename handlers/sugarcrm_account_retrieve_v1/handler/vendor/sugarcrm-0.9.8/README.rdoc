@@ -1,0 +1,166 @@
+= SugarCRM
+
+* http://github.com/chicks/sugarcrm
+
+REST Bindings for SugarCRM!  
+
+== SUMMARY: 
+
+RubyGem for interacting with SugarCRM via REST.  
+
+== Description:
+
+A less clunky way to interact with SugarCRM via REST.
+
+Instead of SugarCRM.connection.get_entry("Users", "1") you could use SugarCRM::User.find(1).  There is support for collections à la SugarCRM::User.find(1).email_addresses, or SugarCRM::Contact.first.meetings << new_meeting.  ActiveRecord style finders are in place, with limited support for conditions and joins. 
+
+== FEATURES/PROBLEMS:
+
+* Works with all v2 API calls
+* Supports creation, saving, and deletion of SugarCRM specific objects.
+* Validations, typecasting, and serialization of boolean, date, and integer fields
+* Query, update and delete records from collections! 
+* ActiveRecord style finders!
+* Auto-generation of SugarCRM specific objects.  When a connection is established, get_available_modules is called and the resultant modules are turned into SugarCRM::Module classes.  
+* If you want to use the vanilla API, you can access the methods directly on the SugarCRM.connection object.
+
+== SYNOPSIS:
+
+  require 'sugarcrm'
+  
+  # Establish a connection
+  SugarCRM.connect("http://localhost/sugarcrm", 'user', 'password')
+
+  # Enable debugging on the current connection
+  SugarCRM.connection.debug = true
+
+  # Get the logged in user
+  SugarCRM.current_user
+
+  # Show a list of available modules
+  SugarCRM.modules
+
+  # Retrieve a User by user_name
+  SugarCRM::User.find_by_user_name("admin")
+  
+  # Update a User's title
+  u = SugarCRM::User.find_by_first_name_and_last_name("Will", "Westin")
+  u.title = "Sales Manager Central"
+  u.save
+  
+  # Check if an object is valid (i.e. if it has the required fields to save)
+  u.valid?
+    
+  # Access the errors collection
+  u.errors
+  
+  # Show the fields required to save
+  u.required_attributes
+  
+  # Delete an Account
+  a = SugarCRM::Account.find_by_name("JAB Funds Ltd.")
+  a.delete
+
+  # Retrieve all Email Addresses assigned to a particular User.
+  SugarCRM::User.find_by_user_name('sarah').email_addresses
+  
+  # Retrieve all Email Addresses on an Account
+  SugarCRM::Account.find_by_name("JAB Funds Ltd.").contacts.each do |contact|
+    contact.email_addresses.each do |email|
+      puts "#{email.email_address}" unless email.opt_out == true
+    end
+  end
+  
+  # Add a Meeting to a Contact
+  c = SugarCRM::Contact.first
+  c.meetings << SugarCRM::Meeting.new({
+    :name => "Product Introduction", 
+    :date_start => DateTime.now,
+    :duration_hours => 1
+  })
+  c.save!
+  
+  # Add a Contact to an Account
+  a = SugarCRM::Account.find_by_name("JAB Funds Ltd.")
+  c = SugarCRM::Contact.new
+  c.last_name = 'Doe'
+  a.contacts << c
+  a.save # or a.contacts.save
+  
+  # Check if an Account has a specific Contact associated with it
+  c = SugarCRM::Contact.find_by_last_name("Doe")
+  a = SugarCRM::Account.find_by_name("JAB Funds Ltd.")
+  a.contacts.include?(c)
+  
+  # Remove a Contact from an Account
+  c = SugarCRM::Contact.find_by_last_name("Doe")
+  a = SugarCRM::Account.find_by_name("JAB Funds Ltd.")
+  a.contacts.delete(c)
+  a.save # or a.contacts.save
+  
+  # Look up the Case with the smallest case number
+  SugarCRM::Case.first({
+    :order_by => 'case_number'
+  })
+  
+  # Retrieve the first 10 Accounts with a zip code between 10000 and 10500
+  SugarCRM::Account.all({
+    :conditions => { :billing_address_postalcode => ["> '10000'", "<= '10500'" ] },
+    :limit => '10',
+    :order_by => 'billing_address_postalcode'
+  })
+  
+  # Retrieve all Accounts with a zip code
+  SugarCRM::Account.all({
+    :conditions => { :billing_address_postalcode => "<> NULL" }
+  })
+  
+  # Retrieve all Accounts with 'Fund' in their name
+  SugarCRM::Account.all({
+    :conditions => { :name => "LIKE '%Fund%'" } # note that SQL operators must be uppercase
+  })
+  
+  # Look up the fields for a given module
+  SugarCRM::Module.find("Accounts").fields
+  
+  # Look up the relationships for a given module
+  SugarCRM::Module.find("Accounts").link_fields
+  
+  # Use the HTTP Connection and SugarCRM API to load the Admin user
+  SugarCRM.connection.get_entry("Users", 1)
+
+  # Retrieve all Accounts by user name (direct API method)
+  SugarCRM.connection.get_entry_list(
+    "Users",
+    "users.user_name = \'sarah\'",
+    {
+      :link_fields => [
+        {
+          "name"  => "accounts",
+          "value" => ["id", "name"]
+        }
+      ]          
+    } 
+  )
+
+== REQUIREMENTS:
+
+* >= activesupport 3.0.0 gem
+
+== INSTALL:
+
+* sudo gem install sugarcrm
+
+== Note on Patches/Pull Requests
+ 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2010 Carl Hicks. See LICENSE for details.
