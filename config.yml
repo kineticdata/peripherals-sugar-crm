@@ -2,3 +2,7 @@
 repo-name: peripherals-sugar-crm
 categories:
 - CRM
+description: SugarCRM's functionality includes sales-force automation, marketing campaigns, customer support, collaboration, Mobile CRM, Social CRM and reporting.
+manufacturer: SugarCRM
+display-name: SugarCRM
+product: SugarCRM
